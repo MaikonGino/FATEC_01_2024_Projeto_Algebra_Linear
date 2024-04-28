@@ -1,45 +1,32 @@
-def exibir_tabela_precos_unitarios(ingredientes):
-    print("\nTabela de Preços Unitários dos Ingredientes:")
-    print("{:<20} {:<15} {:<15}".format("Ingrediente", "COPACABANA", "PAGUE MENOS"))
-    for ingrediente, precos in ingredientes.items():
-        print("{:<20} R$ {:<13.2f} R$ {:<13.2f}".format(ingrediente, precos['COPACABANA'], precos['PAGUE MENOS']))
-
-def exibir_tabela_precos_ingredientes(ingredientes):
-    print("\nTabela de Preços dos Ingredientes em cada Supermercado:")
-    print("{:<15} {:<15} {:<15}".format("", "COPACABANA", "PAGUE MENOS"))
-    for ingrediente, precos in ingredientes.items():
-        print("{:<15} R$ {:<11.2f} R$ {:<11.2f}".format(ingrediente, precos['COPACABANA'], precos['PAGUE MENOS']))
-
 def calcular_custo_sanduiche(ingredientes, ingredientes_sanduiche, mercado):
     custo_sanduiche = {}
     for sanduiche, ingredientes_sanduiche in ingredientes_sanduiche.items():
-        custo_total = sum(ingredientes[ingrediente][mercado] for ingrediente in ingredientes_sanduiche)
+        custo_total = sum(ingredientes[ingrediente][mercado] * quantidade for ingrediente, quantidade in ingredientes_sanduiche.items())
         custo_sanduiche[sanduiche] = custo_total
     return custo_sanduiche
 
-def aplicar_correcao_precos(ingredientes, fator):
-    for ingrediente, precos in ingredientes.items():
-        for mercado, preco in precos.items():
-            ingredientes[ingrediente][mercado] *= fator
+
+def aplicar_correcao_precos(custo_sanduiche, fator):
+    for sanduiche, custo in custo_sanduiche.items():
+        custo_sanduiche[sanduiche] *= fator
 
 def menu_alterar_precos(ingredientes):
     while True:
         print("\nMenu - Alterar Preços dos Ingredientes:")
-        print("1. Visualizar Tabela de Preços Unitários")
-        print("2. Alterar Preço de um Ingrediente")
-        print("3. Voltar ao Menu Principal")
+        print("0. Voltar ao Menu Principal")
+        for idx, ingrediente in enumerate(ingredientes.keys(), start=1):
+            print(f"{idx}. Alterar Preço de {ingrediente}")
         opcao = input("Escolha uma opção: ")
 
-        if opcao == '1':
-            exibir_tabela_precos_unitarios(ingredientes)
-        elif opcao == '2':
-            ingrediente = input("Digite o nome do ingrediente que deseja alterar o preço: ")
+        if opcao == '0':
+            return
+        elif opcao.isdigit() and 1 <= int(opcao) <= len(ingredientes):
+            idx = int(opcao)
+            ingrediente = list(ingredientes.keys())[idx - 1]
             mercado = input("Digite o nome do supermercado (COPACABANA ou PAGUE MENOS): ").upper()
             preco_novo = float(input("Digite o novo preço do ingrediente: "))
             ingredientes[ingrediente][mercado] = preco_novo
             print("Preço do ingrediente {} no supermercado {} alterado para R$ {:.2f}".format(ingrediente, mercado, preco_novo))
-        elif opcao == '3':
-            return
         else:
             print("Opção inválida. Por favor, escolha uma opção válida.")
 
@@ -57,9 +44,10 @@ def menu_principal():
     }
 
     ingredientes_sanduiche = {
-        'TM BURGER': ['Pão', 'Carne De Hambúrguer', 'Alface', 'Rúcula', 'Ovo', 'Queijo Muçarela', 'Bacon', 'Tomate', 'Batata Palha'],
-        'TM VEG': ['Pão', 'Alface', 'Rúcula', 'Queijo Muçarela', 'Tomate', 'Batata Palha']
+        'TM BURGER': {'Pão': 1, 'Carne De Hambúrguer': 2, 'Alface': 0.05, 'Rúcula': 0, 'Ovo': 1, 'Queijo Muçarela': 0.1, 'Bacon': 0.09, 'Tomate': 0.06, 'Batata Palha': 0.02},
+        'TM VEG': {'Pão': 1, 'Alface': 0.05, 'Rúcula': 0.05, 'Queijo Muçarela': 0.14, 'Tomate': 0.08, 'Batata Palha': 0.03}
     }
+
 
     while True:
         print("\nMenu Principal:")
@@ -70,7 +58,8 @@ def menu_principal():
         opcao = input("Escolha uma opção: ")
 
         if opcao == '1':
-            exibir_tabela_precos_ingredientes(ingredientes)
+            for ingrediente, precos in ingredientes.items():
+                print(f"{ingrediente}: {precos}")
         elif opcao == '2':
             mercado = input("Digite o nome do supermercado para calcular os custos (COPACABANA ou PAGUE MENOS): ").upper()
             custo_sanduiche = calcular_custo_sanduiche(ingredientes, ingredientes_sanduiche, mercado)
