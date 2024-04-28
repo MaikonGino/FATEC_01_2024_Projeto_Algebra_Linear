@@ -48,8 +48,9 @@ def menu_principal():
         'TM VEG': {'Pão': 1, 'Alface': 0.05, 'Rúcula': 0.05, 'Queijo Muçarela': 0.14, 'Tomate': 0.08, 'Batata Palha': 0.03}
     }
 
-
     while True:
+        print("\n")
+        print("--------- TRIÂNGULO MATRICIAL LANCHES ---------")
         print("\nMenu Principal:")
         print("1. Visualizar Tabela de Preços dos Ingredientes")
         print("2. Calcular Custo de Produção de Cada Sanduíche")
