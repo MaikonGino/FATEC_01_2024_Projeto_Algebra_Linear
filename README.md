@@ -18,6 +18,7 @@ Para executar o programa, basta executar o script `triangulo-matricial.py` no Py
 
 ```bash
 python triangulo-matricial.py
+```
 
 ## PARTICIPANTES:
 
