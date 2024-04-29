@@ -20,7 +20,7 @@ Para executar o programa, basta executar o script `triangulo-matricial.py` no Py
 python triangulo-matricial.py
 ```
 
-## PARTICIPANTES:
+## Participantes:
 
 - [Eryck Lino](https://github.com/Eryck223)<br>
 - [Igor Ferreira](https://github.com/igornsferreira)<br>
